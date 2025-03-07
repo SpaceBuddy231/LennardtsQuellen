@@ -1,9 +1,0 @@
-[22:08:15 2025-03-07] FETCHING Version 2.39.5
-[22:08:15 2025-03-07] DOWNLOADING https://github.com/spicetify/cli/releases/download/v2.39.5/spicetify-2.39.5-linux-amd64.tar.gz
-[22:08:17 2025-03-07] EXTRACTING /home/spacebuddy/.spicetify/spicetify.tar.gz
-[22:08:17 2025-03-07] SETTING EXECUTABLE PERMISSIONS TO /home/spacebuddy/.spicetify/spicetify
-[22:08:17 2025-03-07] REMOVING /home/spacebuddy/.spicetify/spicetify.tar.gz
-[22:08:17 2025-03-07] spicetify path already set in /home/spacebuddy/.bashrc, continuing...
-[22:08:17 2025-03-07] spicetify path already set in /home/spacebuddy/.bash_profile, continuing...
-[22:08:17 2025-03-07] spicetify v2.39.5 was installed successfully to /home/spacebuddy/.spicetify
-[22:08:17 2025-03-07] Run 'spicetify --help' to get started
