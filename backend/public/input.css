@@ -35,13 +35,13 @@ body {
 }
 
 .titlenav {
-  font-size: clamp(1.5rem, 3vw + 1rem, 3.5rem);
+  font-size: clamp(1.5rem, 2.8vw + 0.9rem, 3.5rem);
   text-decoration: underline;
 }
 
 .LoginButton {
   display: inline-block;
-  font-size: clamp(1.5rem, 3vw + 1rem, 3.5rem);
+  font-size: clamp(1.5rem, 2.8vw + 0.9rem, 3.5rem);
   background-color: #ffb140;
   border-radius: 20px;
   -webkit-border-radius: 20px;
@@ -58,15 +58,35 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 5%;
+  margin-top: 1%;
 }
 
 img {
-  max-width: 50%;
-  max-height: 45%;
+  width: 90%; /* Larger on small screens */
+  height: auto;
+  max-width: 1150px; /* Prevent too large on desktops */
+  min-width: 280px; /* Ensure visibility on small screens */
+}
+
+/* For tablets */
+@media (min-width: 768px) {
+  img {
+    width: 70%;
+  }
+}
+
+/* For desktops */
+@media (min-width: 1200px) {
+  img {
+    width: 55%;
+  }
 }
 
 .lennardts-comment {
   position: absolute;
-  bottom: 100%;
+  bottom: 80%;
+  font-size: clamp(0.5rem, 1.5vw + 0.5rem, 3.5rem);
+  rotate: 8deg;
+  /* Margin-left = max 15 and -15*/
+  /* Marign-bottom = max 4 and -2 */
 }
