@@ -1,0 +1,20 @@
+{
+    // Use Prettier as default formatter for all files
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    
+    // Override for JavaScript files - use VS Code's built-in formatter
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    
+    // Optional helpful formatting settings
+    "editor.formatOnSave": true,
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 2,
+    
+    // Enable the formatters
+    "editor.formatOnSaveMode": "file",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    }
+}
