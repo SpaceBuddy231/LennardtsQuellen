@@ -26,25 +26,44 @@ window.onload = function () {
     // Set random comment for lennards text
     lennards_weisen_worte[0].innerHTML = randomComment;
 
+    lennards_weisen_worte[0].style.rotate = randRotationCalc() + "deg";
+    lennards_weisen_worte[0].style.marginLeft = randLocationCommentCalc(1) + "%";
+    lennards_weisen_worte[0].style.marginBottom = randLocationCommentCalc(2) + "%";
 
 };
 
 function randRotationCalc() {
-    calc = Math.floor((Math.random() * 17) - 8)
+    console.log("DEBUG: Calculating random rotation");
+    let calc = Math.floor((Math.random() * 17) - 8);
+    console.log("DEBUG: Generated rotation value:", calc + "deg");
     return calc;
 }
 
-function randLocationCommentCalc() {
+function randLocationCommentCalc(toggler) {
+    console.log("DEBUG: Calculating random location with toggler:", toggler);
     let calc_x = Math.floor((Math.random() * 31) - 15);
-    let calc_y = Math.floor((Math.random() * 9) - 4);
+    let calc_y = Math.floor((Math.random() * 8) - 3);
+    console.log("DEBUG: Generated values - X:", calc_x, "Y:", calc_y);
 
-    return { x: calc_x, y: calc_y }
+    if (toggler == 0) {
+        console.log("DEBUG: Returning both coordinates");
+        return { calc_x, calc_y };
+    } else if (toggler == 1) {
+        console.log("DEBUG: Returning X coordinate:", calc_x);
+        return calc_x;
+    } else if (toggler == 2) {
+        console.log("DEBUG: Returning Y coordinate:", calc_y);
+        return calc_y;
+    } else {
+        console.log("DEBUG: Invalid toggler, returning 0");
+        return 0;
+    }
 }
 
-let i = 0;
+//let i = 0;
 
-while (i < 100) {
-    i++;
-    let pos = randLocationCommentCalc();
-    console.log("X: " + pos.x + "\n" + "Y: " + pos.y);
-}
+//while (i < 100) {
+//    i++;
+//    let pos = randLocationCommentCalc();
+//    console.log("X: " + pos.x + "\n" + "Y: " + pos.y);
+//}

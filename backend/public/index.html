@@ -23,16 +23,28 @@
     />
   </head>
   <body>
-    <div class="navbar">
-      <h1 class="rubik-semibold titlenav">Lennardts Quellen</h1>
-      <button onclick="LoginButton()" class="rubik-semibold LoginButton">
-        Login
-      </button>
-    </div>
+    <div id="landing-page">
+      <div class="navbar">
+        <h1
+          class="animate__animated animate__backInLeft rubik-semibold titlenav"
+        >
+          Lennardts Quellen
+        </h1>
+        <button
+          onclick="LoginButton()"
+          class="animate__animated animate__backInRight rubik-semibold LoginButton"
+        >
+          Login
+        </button>
+      </div>
 
-    <div class="main">
-      <p class="rubik-medium lennardts-comment"></p>
-      <img src="assets/lennardt-stroke.png" />
+      <div class="main">
+        <p
+          class="animate__animated animate__pulse rubik-medium lennardts-comment"
+        ></p>
+        <img src="assets/lennardt-stroke.png" />
+      </div>
     </div>
+    <div id="posts"></div>
   </body>
 </html>

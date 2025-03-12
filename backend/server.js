@@ -1,6 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./db");
+const path = require("path");
+
 
 dotenv.config(); // Load environment variables
 const app = express(); // Initialize express app
@@ -10,6 +12,10 @@ const PORT = process.env.PORT || 5000; // Define port
 app.use("/api", require("./routes/api")); // Set REST endpoints
 
 app.use(express.static("public"));
+
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+})
 
 connectDB(); // Connect to database
 
