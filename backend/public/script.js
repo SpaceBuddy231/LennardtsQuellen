@@ -32,30 +32,43 @@ window.onload = function () {
 
 };
 
+// Catch onclick Event for LoginButton() -- see index.html
+function LoginButton() {
+    //console.log("[DEBUG]: Login Button pressed.")
+
+    window.location.href = location.href + "login";
+}
+
+// Catch onclick Event for RegisterButton() -- see index.html
+function RegisterButton() {
+    //console.log("[DEBUG]: Register Button pressed.")
+    window.location.href = location.href + "register";
+}
+
 function randRotationCalc() {
-    console.log("DEBUG: Calculating random rotation");
+    //console.log("DEBUG: Calculating random rotation");
     let calc = Math.floor((Math.random() * 17) - 8);
-    console.log("DEBUG: Generated rotation value:", calc + "deg");
+    //console.log("DEBUG: Generated rotation value:", calc + "deg");
     return calc;
 }
 
 function randLocationCommentCalc(toggler) {
-    console.log("DEBUG: Calculating random location with toggler:", toggler);
+    //console.log("DEBUG: Calculating random location with toggler:", toggler);
     let calc_x = Math.floor((Math.random() * 31) - 15);
     let calc_y = Math.floor((Math.random() * 8) - 3);
-    console.log("DEBUG: Generated values - X:", calc_x, "Y:", calc_y);
+    //console.log("DEBUG: Generated values - X:", calc_x, "Y:", calc_y);
 
     if (toggler == 0) {
-        console.log("DEBUG: Returning both coordinates");
+        //console.log("DEBUG: Returning both coordinates");
         return { calc_x, calc_y };
     } else if (toggler == 1) {
-        console.log("DEBUG: Returning X coordinate:", calc_x);
+        //console.log("DEBUG: Returning X coordinate:", calc_x);
         return calc_x;
     } else if (toggler == 2) {
-        console.log("DEBUG: Returning Y coordinate:", calc_y);
+        //console.log("DEBUG: Returning Y coordinate:", calc_y);
         return calc_y;
     } else {
-        console.log("DEBUG: Invalid toggler, returning 0");
+        //console.log("DEBUG: Invalid toggler, returning 0");
         return 0;
     }
 }

@@ -26,6 +26,11 @@ body {
   font-family: rubik;
 }
 
+html {
+  background-color: #f0f7ee;
+  font-family: rubik;
+}
+
 .navbar {
   display: flex;
   border-bottom: 3px black solid;
@@ -66,43 +71,49 @@ body {
 }
 
 .main {
-  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 1%;
+  flex-direction: column; /* Stack content vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  background-color: #5da9e9;
+  width: clamp(
+    300px,
+    90%,
+    750px
+  ); /* Use percentage instead of vw for better tablet support */
+  height: clamp(
+    250px,
+    55vh,
+    750px
+  ); /* Reduced max height for better visibility */
+  margin: clamp(20px, 5vh, 100px) auto 0; /* Centered horizontally with auto, reduced max margin-top */
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
 }
 
-img {
-  width: 90%; /* Larger on small screens */
-  height: auto;
-  max-width: 1150px; /* Prevent too large on desktops */
-  min-width: 280px; /* Ensure visibility on small screens */
-}
-
-/* For tablets */
-@media (min-width: 768px) {
-  img {
-    width: 70%;
+/* Media query for mobile devices in landscape orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .main {
+    height: clamp(200px, 70vh, 450px);
+    margin-top: 15px; /* Fixed small margin for landscape */
+    width: clamp(300px, 60%, 650px);
   }
 }
 
-/* For desktops */
-@media (min-width: 1200px) {
-  img {
-    width: 55%;
+/* Media query for tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .main {
+    width: clamp(400px, 70%, 700px);
   }
 }
 
-.lennardts-comment {
-  position: absolute;
-  bottom: 80%;
-  font-size: clamp(0.5rem, 1.5vw + 0.5rem, 3.5rem);
-  rotate: 0%;
-  margin-left: 0%;
-  margin-bottom: 0%;
-  /*Margin-left=max15and-15(Jsimplementation)*/ /*Marign-bottom=max4and-2(Jsimplementation)*/
+/* Ensure content within main doesn't overflow */
+.main > * {
+  max-width: 95%;
+  max-height: 95%;
 }
 
 ::-webkit-scrollbar {
