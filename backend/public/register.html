@@ -3,9 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="register.css" />
-    <script src="register.js"></script>
     <title>Lennards Quellen | Registrieren</title>
+    <script src="register.js"></script>
+
+    <!-- Include Tailwind directly -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Animation libraries -->
     <link
       href="https://cdn.jsdelivr.net/gh/yesiamrocks/cssanimation.io@1.0.3/cssanimation.min.css"
       rel="stylesheet"
@@ -15,39 +19,75 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
 
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
       rel="stylesheet"
     />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              rubik: ['Rubik', 'sans-serif'],
+            },
+            backgroundColor: {
+              primary: '#f0f7ee',
+              button: '#ffb140',
+              'button-hover': '#ffc066',
+              'form-header': '#f7b32b',
+              'form-bg': '#5da9e9',
+            },
+          },
+        },
+      };
+    </script>
   </head>
-  <body>
-    <div class="fullhouse">
-      <div class="navbar">
+  <body class="bg-primary font-rubik">
+    <div class="w-full">
+      <!-- Navigation Bar -->
+      <div
+        class="flex border-b-[3px] border-black p-[1%] justify-between items-center"
+      >
         <h1
-          class="animate__animated animate__backInLeft rubik-semibold titlenav"
+          class="animate__animated animate__backInLeft font-rubik font-semibold text-[clamp(1.5rem,2.8vw+0.9rem,3.5rem)] underline"
         >
           Lennardts Quellen
         </h1>
-        <div class="log-and-reg-group">
+        <div class="flex gap-4 items-center">
           <button
             onclick="LoginButton()"
-            class="animate__animated animate__backInRight rubik-semibold logregButton LoginButton"
+            class="animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-button rounded-[20px] py-2 px-6 border-2 border-[#878472] transition duration-200 hover:bg-button-hover"
           >
             Login
           </button>
           <button
             onclick="RegisterButton()"
-            class="animate__animated animate__backInRight rubik-semibold logregButton RegisterButton"
+            class="animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-primary rounded-[20px] py-2 px-6 border-2 border-[#ffb140] transition duration-200 hover:bg-button-hover"
           >
             Registrieren
           </button>
         </div>
       </div>
 
-      <div class="main">
-        <div></div>
+      <!-- Registration Form Container -->
+      <div
+        id="main"
+        class="flex flex-col bg-form-bg w-[90%] max-w-[750px] h-[55vh] max-h-[750px] mt-5 md:mt-10 lg:mt-20 mx-auto rounded-[20px] overflow-hidden"
+      >
+        <!-- Form Header -->
+        <div
+          class="flex justify-center items-center w-full h-[13%] min-h-[50px] max-h-[200px] bg-form-header rounded-t-[20px]"
+        >
+          <p
+            class="font-rubik font-medium underline text-2xl sm:text-3xl md:text-5xl lg:text-5xl xl:text-5xl"
+          >
+            Registrierungsformular
+          </p>
+        </div>
       </div>
     </div>
   </body>

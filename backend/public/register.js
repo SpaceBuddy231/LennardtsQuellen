@@ -25,3 +25,19 @@
 
 //return { x, y }
 //};
+
+
+
+
+// Catch onclick Event for LoginButton() -- see index.html
+function LoginButton() {
+    //console.log("[DEBUG]: Login Button pressed.")
+
+    window.location.href = "http://127.0.0.1:5000/login";
+}
+
+// Catch onclick Event for RegisterButton() -- see index.html
+function RegisterButton() {
+    //console.log("[DEBUG]: Register Button pressed.")
+    window.location.href = "http://127.0.0.1:5000/register";
+}
