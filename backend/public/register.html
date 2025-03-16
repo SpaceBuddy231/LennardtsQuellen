@@ -27,6 +27,12 @@
       rel="stylesheet"
     />
 
+    <!-- Add this in the <head> section after other links -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
     <script>
       tailwind.config = {
         theme: {
@@ -54,11 +60,14 @@
       <div
         class="flex border-b-[3px] border-black p-2 sm:p-[1%] justify-between items-center"
       >
-        <h1
-          class="animate__animated animate__backInLeft select-none font-rubik font-semibold text-[clamp(1.2rem,2vw+0.8rem,3.5rem)] underline"
-        >
-          Lennardts Quellen
-        </h1>
+        <div onclick="NavbarTitle()">
+          <h1
+            class="animate__animated animate__backInLeft select-none font-rubik font-semibold text-[clamp(1.2rem,2vw+0.8rem,3.5rem)] underline"
+          >
+            Lennardts Quellen
+          </h1>
+        </div>
+
         <div class="flex gap-2 sm:gap-4 items-center">
           <button
             onclick="LoginButton()"
@@ -133,14 +142,23 @@
             >
               Passwort
             </label>
-            <input
-              type="password"
-              id="input_password"
-              name="password"
-              class="input rounded-[3.5px] h-9 sm:h-10 p-2 bg-form-input-bg border-[#878472] border-2 text-text placeholder-[#2525258a] mb-3 sm:mb-4 transition duration-200 ease-in-out focus:border-[#F7B32B] focus:outline-none"
-              placeholder="What a pity :)"
-              required
-            />
+            <div class="relative w-full mb-3 sm:mb-4">
+              <input
+                type="password"
+                id="input_password"
+                name="password"
+                class="input w-full rounded-[3.5px] h-9 sm:h-10 p-2 bg-form-input-bg border-[#878472] border-2 text-text placeholder-[#2525258a] transition duration-200 ease-in-out focus:border-[#F7B32B] focus:outline-none"
+                placeholder="What a pity :)"
+                required
+              />
+              <button
+                type="button"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                onclick="togglePasswordVisibility('input_password')"
+              >
+                <i id="input_password-icon" class="fas fa-eye"></i>
+              </button>
+            </div>
 
             <label
               for="input_revpassword"
@@ -148,14 +166,23 @@
             >
               Passwort wiederholen
             </label>
-            <input
-              type="password"
-              id="input_revpassword"
-              name="revpassword"
-              class="input rounded-[3.5px] h-9 sm:h-10 p-2 bg-form-input-bg border-[#878472] border-2 text-text placeholder-[#2525258a] mb-3 sm:mb-4 transition duration-200 ease-in-out focus:border-[#F7B32B] focus:outline-none"
-              placeholder="What a pity :)"
-              required
-            />
+            <div class="relative w-full mb-3 sm:mb-4">
+              <input
+                type="password"
+                id="input_revpassword"
+                name="revpassword"
+                class="input w-full rounded-[3.5px] h-9 sm:h-10 p-2 bg-form-input-bg border-[#878472] border-2 text-text placeholder-[#2525258a] transition duration-200 ease-in-out focus:border-[#F7B32B] focus:outline-none"
+                placeholder="What a pity :)"
+                required
+              />
+              <button
+                type="button"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                onclick="togglePasswordVisibility('input_revpassword')"
+              >
+                <i id="input_revpassword-icon" class="fas fa-eye"></i>
+              </button>
+            </div>
 
             <label
               for="input_fleischloverpass"
@@ -163,14 +190,23 @@
             >
               Fleischlover Geheimcode
             </label>
-            <input
-              type="password"
-              id="input_fleischloverpass"
-              name="secret_code"
-              class="input rounded-[3.5px] h-9 sm:h-10 p-2 bg-form-input-bg border-[#878472] border-2 text-text placeholder-[#2525258a] mb-3 sm:mb-4 transition duration-200 ease-in-out focus:border-[#F7B32B] focus:outline-none"
-              placeholder="Rate mal :)"
-              required
-            />
+            <div class="relative w-full mb-3 sm:mb-4">
+              <input
+                type="password"
+                id="input_fleischloverpass"
+                name="secret_code"
+                class="input w-full rounded-[3.5px] h-9 sm:h-10 p-2 bg-form-input-bg border-[#878472] border-2 text-text placeholder-[#2525258a] transition duration-200 ease-in-out focus:border-[#F7B32B] focus:outline-none"
+                placeholder="Rate mal :)"
+                required
+              />
+              <button
+                type="button"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                onclick="togglePasswordVisibility('input_fleischloverpass')"
+              >
+                <i id="input_fleischloverpass-icon" class="fas fa-eye"></i>
+              </button>
+            </div>
           </form>
 
           <!-- Buttons in horizontaler Anordnung mit Grid -->

@@ -29,7 +29,6 @@ window.onload = function () {
     lennards_weisen_worte[0].style.rotate = randRotationCalc() + "deg";
     lennards_weisen_worte[0].style.marginLeft = randLocationCommentCalc(1) + "%";
     lennards_weisen_worte[0].style.marginBottom = randLocationCommentCalc(2) + "%";
-
 };
 
 // Catch onclick Event for LoginButton() -- see index.html
@@ -72,6 +71,46 @@ function randLocationCommentCalc(toggler) {
         return 0;
     }
 }
+
+function NavbarTitle() {
+    window.location.href = "http://127.0.0.1:5000/"
+}
+
+async function checkLoginStatus() {
+    try {
+        const response = await fetch('/api/user');
+        const data = await response.json();
+
+        // Get Username <h1> element
+        const username_navbar = document.getElementById("username_navbar");
+
+        if (data.isLoggedIn) {
+            // User is logged in, update UI accordingly
+            console.log(`Logged in as: ${data.user.username}`);
+            // Hide Login and Register buttons
+            const buttons = document.querySelectorAll("#log\\/regbutton");
+            const loginbtn = buttons[0];
+            const registerbtn = buttons[1];
+
+            loginbtn.style.visibility = 'hidden';
+            registerbtn.style.visibility = 'hidden';
+
+            // Explicitly set display to make username visible
+            username_navbar.style.display = "block";
+            username_navbar.textContent = data.user.username;
+        } else {
+            console.log('Not logged in');
+            // Hide username when not logged in
+            if (username_navbar) {
+                username_navbar.style.display = "none";
+            }
+        }
+    } catch (error) {
+        console.error('Error checking login status:', error);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', checkLoginStatus);
 
 //let i = 0;
 

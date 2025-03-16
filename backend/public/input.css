@@ -65,6 +65,10 @@ body {
   border: 2px #ffb140 solid;
 }
 
+#username_navbar {
+  display: none;
+}
+
 /*
 .main {
   position: relative;

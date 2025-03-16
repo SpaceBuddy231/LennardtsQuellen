@@ -52,24 +52,40 @@
       <div
         class="w-full flex border-b-[3px] border-black p-[1%] justify-between items-center"
       >
-        <h1
-          class="animate__animated animate__backInLeft font-rubik font-semibold text-[clamp(1.5rem,2.8vw+0.9rem,3.5rem)] underline"
-        >
-          Lennardts Quellen
-        </h1>
+        <div onclick="NavbarTitle()">
+          <h1
+            class="select-none animate__animated animate__backInLeft font-rubik font-semibold text-[clamp(1.5rem,2.8vw+0.9rem,3.5rem)] underline"
+          >
+            Lennardts Quellen
+          </h1>
+        </div>
+
         <div class="flex gap-4 items-center">
           <button
+            id="log/regbutton"
             onclick="LoginButton()"
             class="animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-button rounded-[20px] py-2 px-6 border-2 border-[#878472] transition duration-200 hover:bg-button-hover"
           >
             Login
           </button>
           <button
+            id="log/regbutton"
             onclick="RegisterButton()"
             class="animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-primary rounded-[20px] py-2 px-6 border-2 border-[#ffb140] transition duration-200 hover:bg-button-hover"
           >
             Registrieren
           </button>
+          <!--<img
+            id="avatar"
+            src="assets/avatar.png"
+            class="hidden w-16 h-16 rounded-full object-cover"
+          />-->
+          <h1
+            id="username_navbar"
+            class="select-none animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1.5rem,2vw+0.9rem,3.5rem)] underline"
+          >
+            Nutzername
+          </h1>
         </div>
       </div>
 
@@ -77,7 +93,7 @@
         class="flex flex-col md:flex-row relative mt-30 justify-center items-center gap-4"
       >
         <p
-          class="animate__animated animate__pulse rubik-medium lennardts-comment text-center md:text-left"
+          class="select-none animate__animated animate__pulse rubik-medium lennardts-comment text-center md:text-left"
         ></p>
         <img
           src="assets/lennardt-stroke.png"
