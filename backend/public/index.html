@@ -6,6 +6,10 @@
     <title>Lennards Quellen</title>
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
+    <!-- Include Tailwind directly -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Animation libraries -->
     <link
       href="https://cdn.jsdelivr.net/gh/yesiamrocks/cssanimation.io@1.0.3/cssanimation.min.css"
       rel="stylesheet"
@@ -15,42 +19,71 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
 
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
       rel="stylesheet"
     />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              rubik: ['Rubik', 'sans-serif'],
+            },
+            backgroundColor: {
+              primary: '#f0f7ee',
+              button: '#ffb140',
+              'button-hover': '#ffc066',
+              'form-header': '#f7b32b',
+              'form-bg': '#5da9e9',
+            },
+          },
+        },
+      };
+    </script>
   </head>
-  <body>
-    <div id="landing-page">
-      <div class="navbar">
+  <body class="bg-primary font-rubik">
+    <div class="w-full">
+      <!-- Navigation Bar -->
+      <div
+        class="w-full flex border-b-[3px] border-black p-[1%] justify-between items-center"
+      >
         <h1
-          class="animate__animated animate__backInLeft rubik-semibold titlenav"
+          class="animate__animated animate__backInLeft font-rubik font-semibold text-[clamp(1.5rem,2.8vw+0.9rem,3.5rem)] underline"
         >
           Lennardts Quellen
         </h1>
-        <div class="log-and-reg-group">
+        <div class="flex gap-4 items-center">
           <button
             onclick="LoginButton()"
-            class="animate__animated animate__backInRight rubik-semibold logregButton LoginButton"
+            class="animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-button rounded-[20px] py-2 px-6 border-2 border-[#878472] transition duration-200 hover:bg-button-hover"
           >
             Login
           </button>
           <button
             onclick="RegisterButton()"
-            class="animate__animated animate__backInRight rubik-semibold logregButton RegisterButton"
+            class="animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-primary rounded-[20px] py-2 px-6 border-2 border-[#ffb140] transition duration-200 hover:bg-button-hover"
           >
             Registrieren
           </button>
         </div>
       </div>
 
-      <div class="main">
+      <div
+        class="flex flex-col md:flex-row relative mt-30 justify-center items-center gap-4"
+      >
         <p
-          class="animate__animated animate__pulse rubik-medium lennardts-comment"
+          class="animate__animated animate__pulse rubik-medium lennardts-comment text-center md:text-left"
         ></p>
-        <img src="assets/lennardt-stroke.png" />
+        <img
+          src="assets/lennardt-stroke.png"
+          alt="Lennardt Illustration"
+          class="w-[90%] md:w-[70%] lg:w-[60%] max-w-4xl"
+        />
       </div>
     </div>
     <div id="posts"></div>

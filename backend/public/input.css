@@ -65,6 +65,7 @@ body {
   border: 2px #ffb140 solid;
 }
 
+/*
 .main {
   position: relative;
   display: flex;
@@ -73,13 +74,16 @@ body {
   flex-direction: column;
   margin-top: 1%;
 }
+*/
 
+/*
 img {
   width: 90%; /* Larger on small screens */
-  height: auto;
+/*  height: auto;
   max-width: 1150px; /* Prevent too large on desktops */
-  min-width: 280px; /* Ensure visibility on small screens */
-}
+/*  min-width: 280px; /* Ensure visibility on small screens */
+/*}
+*/
 
 /* For tablets */
 @media (min-width: 768px) {

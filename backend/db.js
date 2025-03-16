@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 const connectDB = async () => {
@@ -15,3 +15,4 @@ const connectDB = async () => {
   };
 
 module.exports = connectDB;
+*/
