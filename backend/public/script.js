@@ -18,7 +18,9 @@ const potential_comments = [
     'Nachthimmel = Sparmodus!',
     'Wir leben in einer Simulation!',
     'Ramon der geile!',
-    'Ich will Mark den Geilen!'
+    'Ich will Mark den Geilen!',
+    'Die da oben belügen uns!',
+    'Die Wahrheit wird unterdrückt!'
 ];
 
 window.onload = function () {
