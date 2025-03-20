@@ -17,7 +17,8 @@ const potential_comments = [
     'Nachthimmel = LED-Leuchten!',
     'Nachthimmel = Sparmodus!',
     'Wir leben in einer Simulation!',
-    'Ramon der geile!'
+    'Ramon der geile!',
+    'Ich will Mark den Geilen!'
 ];
 
 window.onload = function () {
