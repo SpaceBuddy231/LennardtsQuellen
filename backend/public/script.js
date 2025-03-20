@@ -14,6 +14,10 @@ const potential_comments = [
     'Antarktis = Nazi Basis!',
     'WLAN strahlt uns krank!',
     'Wir leben in einer Simulation!',
+    'Nachthimmel = LED-Leuchten!',
+    'Nachthimmel = Sparmodus!',
+    'Wir leben in einer Simulation!',
+    'Ramon der geile!'
 ];
 
 window.onload = function () {
