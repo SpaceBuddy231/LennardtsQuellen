@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel | Lennards Quellen</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Include Tailwind directly -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Animation libraries -->
+    <link
+      href="https://cdn.jsdelivr.net/gh/yesiamrocks/cssanimation.io@1.0.3/cssanimation.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              rubik: ['Rubik', 'sans-serif'],
+            },
+            backgroundColor: {
+              primary: '#f0f7ee',
+              button: '#ffb140',
+              'button-hover': '#ffc066',
+              'form-header': '#f7b32b',
+              'form-bg': '#5da9e9',
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-primary font-rubik">
+    <div class="w-full">
+      <!-- Navigation Bar -->
+      <div
+        class="w-full flex border-b-[3px] border-black p-[1%] justify-between items-center"
+      >
+        <div onclick="window.location.href='/'">
+          <h1
+            class="select-none animate__animated animate__backInLeft font-semibold text-[clamp(1.5rem,2.8vw+0.9rem,3.5rem)] underline"
+          >
+            Admin Panel
+          </h1>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="container mx-auto py-8 px-4">
+        <div class="max-w-4xl mx-auto">
+          <h2 class="text-2xl font-semibold mb-6">Site Maintenance</h2>
+
+          <div
+            class="bg-white p-6 rounded-lg border-2 border-black shadow-lg mb-8"
+          >
+            <h3 class="text-xl font-medium mb-4">
+              Wartungsmodus Einstellungen
+            </h3>
+
+            <div class="mb-4">
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  id="maintenance-toggle"
+                  class="form-checkbox h-5 w-5 text-blue-600"
+                />
+                <span class="ml-2 text-gray-700">Wartungsmodus aktivieren</span>
+              </label>
+            </div>
+
+            <div class="mb-4">
+              <label for="maintenance-message" class="block mb-2 font-medium"
+                >Wartungsnachricht:</label
+              >
+              <textarea
+                id="maintenance-message"
+                class="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#F7B32B]"
+                rows="3"
+              >
+Die Seite befindet sich aktuell im Wartungsmodus. Bitte versuchen Sie es später erneut.</textarea
+              >
+            </div>
+
+            <div class="mb-6">
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  id="admin-access-toggle"
+                  class="form-checkbox h-5 w-5 text-blue-600"
+                  checked
+                />
+                <span class="ml-2 text-gray-700"
+                  >Admin-Zugriff während Wartung erlauben</span
+                >
+              </label>
+            </div>
+
+            <button
+              id="save-maintenance-settings"
+              class="font-semibold bg-button hover:bg-button-hover py-2 px-6 rounded-[20px] border-2 border-[#878472] transition duration-200 hover:scale-105"
+            >
+              Einstellungen speichern
+            </button>
+          </div>
+
+          <div
+            id="status-message"
+            class="hidden py-4 px-6 rounded-lg text-center font-medium"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Check if user is admin
+      async function checkAdminAccess() {
+        try {
+          const response = await fetch('/api/user');
+          const data = await response.json();
+
+          if (!data.isLoggedIn || !data.user.isAdmin) {
+            window.location.href = '/';
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          window.location.href = '/';
+        }
+      }
+
+      // Load maintenance settings
+      async function loadMaintenanceSettings() {
+        try {
+          const response = await fetch('/api/maintenance/status');
+          const data = await response.json();
+
+          document.getElementById('maintenance-toggle').checked =
+            data.inMaintenance;
+          document.getElementById('maintenance-message').value =
+            data.message ||
+            'Die Seite befindet sich aktuell im Wartungsmodus. Bitte versuchen Sie es später erneut.';
+        } catch (error) {
+          console.error('Error loading maintenance settings:', error);
+          showStatusMessage('Fehler beim Laden der Einstellungen', 'error');
+        }
+      }
+
+      // Save maintenance settings
+      async function saveMaintenanceSettings() {
+        try {
+          const enabled = document.getElementById('maintenance-toggle').checked;
+          const message = document.getElementById('maintenance-message').value;
+          const allowAdminAccess = document.getElementById(
+            'admin-access-toggle'
+          ).checked;
+
+          const response = await fetch('/api/maintenance/toggle', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ enabled, message, allowAdminAccess }),
+          });
+
+          if (response.ok) {
+            showStatusMessage(
+              'Einstellungen erfolgreich gespeichert',
+              'success'
+            );
+          } else {
+            const data = await response.json();
+            showStatusMessage(`Fehler: ${data.message}`, 'error');
+          }
+        } catch (error) {
+          console.error('Error saving maintenance settings:', error);
+          showStatusMessage('Fehler beim Speichern der Einstellungen', 'error');
+        }
+      }
+
+      // Show status message
+      function showStatusMessage(message, type) {
+        const statusEl = document.getElementById('status-message');
+        statusEl.textContent = message;
+        statusEl.classList.remove(
+          'hidden',
+          'bg-green-100',
+          'text-green-700',
+          'bg-red-100',
+          'text-red-700'
+        );
+
+        if (type === 'success') {
+          statusEl.classList.add('bg-green-100', 'text-green-700');
+        } else {
+          statusEl.classList.add('bg-red-100', 'text-red-700');
+        }
+
+        // Show message
+        statusEl.classList.remove('hidden');
+
+        // Hide after 3 seconds
+        setTimeout(() => {
+          statusEl.classList.add('hidden');
+        }, 3000);
+      }
+
+      // Set up event listeners
+      document.addEventListener('DOMContentLoaded', () => {
+        checkAdminAccess();
+        loadMaintenanceSettings();
+
+        document
+          .getElementById('save-maintenance-settings')
+          .addEventListener('click', saveMaintenanceSettings);
+      });
+    </script>
+  </body>
+</html>

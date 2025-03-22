@@ -55,7 +55,7 @@ async function Submit() {
     }
 
     // Check if Fleischlover Secret Key is correct (will be dynamicly in the future)
-    if (input_secret_code[0].value != "FleischloverSecret") {
+    if (!input_secret_code[0].value) {
         ToError(input_secret_code[0]);
     }
 
@@ -88,6 +88,8 @@ async function Submit() {
                 alert("Nutzername oder Email bereits vergeben.")
             } else if (response.status == 403) {
                 alert("Da ist wohl jemand kein Fleischlover :>")
+            } else if (response.status == 408) {
+                alert("Dein Nutzername ist zu lang.")
             } else {
                 alert(`Fehler. Melde das hier einen der Hauptfleischlover: ${data.message}`)
             }
@@ -134,8 +136,36 @@ function LoginButton() {
     window.location.href = location.origin + "/login";
 }
 
-// Catch onclick Event for RegisterButton() -- see index.html
+// Ensure the Submit function is properly attached to your register form
+
+// Update your HTML form to have a button with either:
+// 1. onclick="Submit()" attribute, or
+// 2. Make sure your form has an event listener set up
+
+// If your form has an id="registerForm", add this at the bottom of register.js
+document.addEventListener('DOMContentLoaded', function () {
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            Submit();
+        });
+    }
+
+    // Or if you have a specific button with id="registerButton"
+    const registerButton = document.getElementById('registerButton');
+    if (registerButton) {
+        registerButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            Submit();
+        });
+    }
+});
+
+// Or you can modify your existing RegisterButton function:
 function RegisterButton() {
-    //console.log("[DEBUG]: Register Button pressed.")
-    window.location.href = location.origin + "/register";
+    // This function should handle the form submission, not just navigate
+    Submit();
+    // Don't navigate away - the Submit function will handle that if successful
+    // window.location.href = location.origin + "/register";
 }

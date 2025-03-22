@@ -1,18 +1,30 @@
-/*const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const mysql = require('mysql2/promise');
+const dotenv = require("dotenv");
 
-const connectDB = async () => {
-    try {
-      await mongoose.connect(process.env.DATABASE_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      });
-      console.log('MongoDB verbunden');
-    } catch (error) {
-      console.error('Datenbankfehler:', error);
-      process.exit(1);
-    }
-  };
+dotenv.config();
 
-module.exports = connectDB;
-*/
+// Database connection configuration
+const DB_CONFIG = {
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'lennardtdatabase',
+  port: process.env.DB_PORT || 3306,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+};
+
+// Create a connection pool
+const createPool = async () => {
+  try {
+    const pool = mysql.createPool(DB_CONFIG);
+    console.log("Database connection pool initialized");
+    return pool;
+  } catch (error) {
+    console.error("Failed to create database connection pool:", error);
+    throw error;
+  }
+};
+
+module.exports = createPool;

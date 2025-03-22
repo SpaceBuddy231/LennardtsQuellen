@@ -46,7 +46,7 @@
       };
     </script>
   </head>
-  <body class="bg-primary font-rubik">
+  <body class="bg-primary">
     <div class="w-full">
       <!-- Navigation Bar -->
       <div
@@ -54,35 +54,30 @@
       >
         <div onclick="NavbarTitle()">
           <h1
-            class="select-none animate__animated animate__backInLeft font-rubik font-semibold text-[clamp(1.5rem,2.8vw+0.9rem,3.5rem)] underline"
+            class="select-none animate__animated animate__backInLeft font-semibold text-[clamp(1.5rem,2.8vw+0.9rem,3.5rem)] underline"
           >
             Lennardts Quellen
           </h1>
         </div>
 
-        <div class="flex gap-4 items-center">
+        <div class="flex gap-2 sm:gap-4 items-center">
           <button
             id="log/regbutton"
             onclick="LoginButton()"
-            class="animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-button rounded-[20px] py-2 px-6 border-2 border-[#878472] transition duration-200 hover:bg-button-hover"
+            class="animate__animated animate__backInRight font-semibold text-[clamp(0.8rem,1vw+0.5rem,2.5rem)] bg-button rounded-[20px] py-1 px-3 sm:py-2 sm:px-6 border-2 border-[#878472] transition duration-200 hover:bg-button-hover"
           >
             Login
           </button>
           <button
             id="log/regbutton"
             onclick="RegisterButton()"
-            class="animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-primary rounded-[20px] py-2 px-6 border-2 border-[#ffb140] transition duration-200 hover:bg-button-hover"
+            class="animate__animated animate__backInRight font-semibold text-[clamp(0.8rem,1vw+0.5rem,2.5rem)] bg-primary rounded-[20px] py-1 px-3 sm:py-2 sm:px-6 border-2 border-[#ffb140] transition duration-200 hover:bg-button-hover"
           >
             Registrieren
           </button>
-          <!--<img
-            id="avatar"
-            src="assets/avatar.png"
-            class="hidden w-16 h-16 rounded-full object-cover"
-          />-->
           <h1
             id="username_navbar"
-            class="select-none animate__animated animate__backInRight font-rubik font-semibold text-[clamp(1.5rem,2vw+0.9rem,3.5rem)] underline"
+            class="select-none animate__animated animate__backInRight font-semibold text-[clamp(1rem,1.5vw+0.7rem,3rem)] underline truncate max-w-[150px] sm:max-w-none"
           >
             Nutzername
           </h1>
@@ -102,6 +97,45 @@
         />
       </div>
     </div>
-    <div id="posts"></div>
+    <div id="posts" class="w-full mt-72 mb-12">
+      <div class="flex justify-center w-full">
+        <div
+          id="quellen-title-frame"
+          class="select-none font-semibold flex w-[80%] h-auto min-h-[6rem] py-4 border-[3px] border-black justify-center items-center text-center overflow-hidden"
+        >
+          <div id="quellen-title">
+            <div>
+              <p class="text-[clamp(1.2rem,2vw+0.8rem,3rem)] px-2">
+                Lennardts Quellen
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-center mt-6">
+        <!-- Improved responsive button styling -->
+        <button
+          id="add-post-button"
+          onclick="AddPost()"
+          class="animate__animated animate__bounceIn font-semibold text-[clamp(0.8rem,1vw+0.5rem,2rem)] bg-button rounded-[20px] py-2 sm:py-3 px-4 sm:px-8 border-2 border-[#878472] transition duration-200 hover:bg-button-hover hover:scale-105 flex items-center flex-wrap sm:flex-nowrap justify-center"
+        >
+          <span class="mx-2">
+            <img
+              src="assets/lennardt-stroke.png"
+              class="w-[clamp(1rem,1.5vw+1rem,3rem)] mb-2 sm:mb-4"
+          /></span>
+          <span class="text-center whitespace-normal px-2"
+            >Quelle hinzufügen</span
+          >
+          <span class="mx-2">
+            <img
+              src="assets/lennardt-stroke.png"
+              class="w-[clamp(1rem,1.5vw+1rem,3rem)] mb-2 sm:mb-4"
+            />
+          </span>
+        </button>
+      </div>
+      <!-- Posts will be dynamically inserted here by JavaScript -->
+    </div>
   </body>
 </html>

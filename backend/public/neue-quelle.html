@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lennards Quellen</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+    <!-- Include Tailwind directly -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Animation libraries -->
+    <link
+      href="https://cdn.jsdelivr.net/gh/yesiamrocks/cssanimation.io@1.0.3/cssanimation.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Add this to the head section of the neue-quelle.html file -->
+    <script src="neue-quelle.js"></script>
+
+    <!-- Also add Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              rubik: ['Rubik', 'sans-serif'],
+            },
+            backgroundColor: {
+              primary: '#f0f7ee',
+              button: '#ffb140',
+              'button-hover': '#ffc066',
+              'form-header': '#f7b32b',
+              'form-bg': '#5da9e9',
+              'form-input-bg': '#70BDFF', // Added this line
+              text: '#252525',
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-primary">
+    <div class="w-full">
+      <!-- Navigation Bar -->
+      <div
+        class="w-full flex border-b-[3px] border-black p-[1%] justify-between items-center"
+      >
+        <div onclick="NavbarTitle()">
+          <h1
+            class="select-none animate__animated animate__backInLeft font-semibold text-[clamp(1.5rem,2.8vw+0.9rem,3.5rem)] underline"
+          >
+            Lennardts Quellen
+          </h1>
+        </div>
+
+        <div class="flex gap-4 items-center">
+          <button
+            id="log/regbutton"
+            onclick="LoginButton()"
+            class="animate__animated animate__backInRight font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-button rounded-[20px] py-2 px-6 border-2 border-[#878472] transition duration-200 hover:bg-button-hover"
+          >
+            Login
+          </button>
+          <button
+            id="log/regbutton"
+            onclick="RegisterButton()"
+            class="animate__animated animate__backInRight font-semibold text-[clamp(1rem,1.5vw+0.5rem,2.5rem)] bg-primary rounded-[20px] py-2 px-6 border-2 border-[#ffb140] transition duration-200 hover:bg-button-hover"
+          >
+            Registrieren
+          </button>
+          <!--<img
+            id="avatar"
+            src="assets/avatar.png"
+            class="hidden w-16 h-16 rounded-full object-cover"
+          />-->
+          <h1
+            id="username_navbar"
+            class="select-none animate__animated animate__backInRight font-semibold text-[clamp(1.5rem,2vw+0.9rem,3.5rem)] underline"
+          >
+            Nutzername
+          </h1>
+        </div>
+      </div>
+
+      <!-- Post Creation Form Container -->
+      <div
+        id="main"
+        class="animate__animated animate__zoomIn flex flex-col bg-form-bg w-[95%] sm:w-[90%] max-w-[750px] h-auto min-h-[500px] mt-4 sm:mt-8 md:mt-12 lg:mt-16 mx-auto rounded-[20px] overflow-hidden shadow-lg"
+      >
+        <!-- Form Header -->
+        <div
+          class="flex justify-center items-center w-full py-3 sm:py-4 bg-form-header rounded-t-[20px]"
+        >
+          <p
+            class="select-none font-rubik font-medium underline text-xl sm:text-2xl md:text-3xl lg:text-4xl"
+          >
+            Neue Quelle erstellen
+          </p>
+        </div>
+
+        <!-- Post Form Body -->
+        <div id="form" class="flex flex-col p-4 sm:p-6">
+          <div
+            id="inp-form"
+            class="flex flex-col w-full sm:w-[95%] col-span-2 mx-auto mb-6"
+          >
+            <label
+              for="input_title"
+              class="select-none font-rubik font-medium text-lg sm:text-xl underline mb-1"
+            >
+              Titel
+            </label>
+            <input
+              type="text"
+              id="input_title"
+              name="title"
+              class="input rounded-[3.5px] h-9 sm:h-10 p-2 bg-form-input-bg border-[#878472] border-2 text-text placeholder-[#2525258a] mb-3 sm:mb-4 transition duration-200 ease-in-out focus:border-[#F7B32B] focus:outline-none"
+              placeholder="Lennardts Mindset"
+              required
+            />
+
+            <label
+              for="input_content"
+              class="select-none font-rubik font-medium text-lg sm:text-xl underline mb-1"
+            >
+              Inhalt
+            </label>
+            <textarea
+              id="input_content"
+              name="content"
+              class="input w-full rounded-[3.5px] h-32 sm:h-40 p-2 bg-form-input-bg border-[#878472] border-2 text-text placeholder-[#2525258a] mb-3 sm:mb-4 resize-y transition duration-200 ease-in-out focus:border-[#F7B32B] focus:outline-none"
+              placeholder="Lennardt hat seine 2 Handys Zuhause vergessen... :("
+              required
+            ></textarea>
+          </div>
+
+          <!-- Buttons in horizontaler Anordnung mit Grid -->
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full sm:w-[80%] mx-auto"
+          >
+            <button
+              onclick="SubmitPost()"
+              type="submit"
+              class="font-rubik font-semibold bg-button hover:bg-button-hover py-2 px-6 sm:py-3 sm:px-8 rounded-[20px] border-2 border-[#878472] text-base sm:text-lg transition-all duration-200 hover:scale-105"
+            >
+              Quelle veröffentlichen
+            </button>
+            <button
+              onclick="CancelPost()"
+              class="font-rubik font-semibold bg-primary hover:bg-button-hover py-2 px-6 sm:py-3 sm:px-8 rounded-[20px] border-2 border-[#ffb140] text-base sm:text-lg transition-all duration-200 hover:scale-105"
+            >
+              Abbrechen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

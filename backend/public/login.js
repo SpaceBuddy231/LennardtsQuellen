@@ -50,7 +50,7 @@ async function Submit() {
     const input_secret_code = document.getElementsByName("secret_code");
 
     // Check secret code
-    if (input_secret_code[0].value != "FleischloverSecret") {
+    if (!input_secret_code[0].value) {
         ToError(input_secret_code[0]);
     }
 
@@ -124,11 +124,11 @@ function togglePasswordVisibility(inputId) {
 function LoginButton() {
     //console.log("[DEBUG]: Login Button pressed.")
 
-    window.location.href = "http://127.0.0.1:5000/login";
+    window.location.href = location.origin + "/login";
 }
 
 // Catch onclick Event for RegisterButton() -- see index.html
 function RegisterButton() {
     //console.log("[DEBUG]: Register Button pressed.")
-    window.location.href = "http://127.0.0.1:5000/register";
+    window.location.href = location.origin + "/register";
 }
