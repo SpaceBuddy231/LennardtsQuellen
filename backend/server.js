@@ -26,6 +26,18 @@ let maintenanceMode = {
   allowAdminAccess: true
 };
 
+// Add no-cache middleware to force browsers to always get the latest files
+// This ensures that updates to the website are immediately visible to users
+app.use((req, res, next) => {
+  // Skip cache headers for API routes to improve performance
+  if (!req.path.startsWith('/api/')) {
+    res.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.header('Pragma', 'no-cache');
+    res.header('Expires', '0');
+  }
+  next();
+});
+
 // Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {
   if (req.session.user && req.session.user.isLoggedIn) {
@@ -168,6 +180,20 @@ async function createTablesIfNotExist() {
         user_id INT NOT NULL,
         value INT NOT NULL CHECK (value >= 0 AND value <= 100),
         PRIMARY KEY (post_id, user_id),
+        FOREIGN KEY (post_id) REFERENCES ${POSTS_TABLE}(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES ${USERS_TABLE}(id) ON DELETE CASCADE
+      )
+    `);
+
+    // Create comments table
+    await dbPool.query(`
+      CREATE TABLE IF NOT EXISTS post_comments (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        post_id INT NOT NULL,
+        user_id INT NOT NULL,
+        username VARCHAR(50) NOT NULL,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (post_id) REFERENCES ${POSTS_TABLE}(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES ${USERS_TABLE}(id) ON DELETE CASCADE
       )
@@ -438,6 +464,34 @@ app.get("/api/posts", async (req, res) => {
       }));
     }
 
+    // Get comments for all posts
+    const [allComments] = await dbPool.query(`
+      SELECT pc.id, pc.post_id, pc.user_id, pc.username, pc.content, pc.created_at
+      FROM post_comments pc
+      ORDER BY pc.created_at DESC
+    `);
+
+    // Group comments by post_id
+    const commentsByPostId = {};
+    allComments.forEach(comment => {
+      if (!commentsByPostId[comment.post_id]) {
+        commentsByPostId[comment.post_id] = [];
+      }
+      commentsByPostId[comment.post_id].push({
+        id: comment.id,
+        username: comment.username,
+        content: comment.content,
+        createdAt: formatDate(comment.created_at),
+        userId: comment.user_id
+      });
+    });
+
+    // Add comments to each post
+    enrichedPosts = enrichedPosts.map(post => ({
+      ...post,
+      comments: commentsByPostId[post.id] || []
+    }));
+
     res.status(200).json({ posts: enrichedPosts });
   } catch (error) {
     console.error(`Error fetching posts: ${error}`);
@@ -666,3 +720,110 @@ app.use((req, res, next) => {
 
   next();
 });
+
+// Get comments for a post
+app.get("/api/posts/:id/comments", async (req, res) => {
+  try {
+    const postId = parseInt(req.params.id);
+
+    if (isNaN(postId)) {
+      return res.status(400).json({ message: "Ungültige Beitrags-ID." });
+    }
+
+    // Fetch comments for this post
+    const [comments] = await dbPool.query(`
+      SELECT id, user_id, username, content, created_at 
+      FROM post_comments 
+      WHERE post_id = ? 
+      ORDER BY created_at DESC
+    `, [postId]);
+
+    // Format dates for each comment
+    const formattedComments = comments.map(comment => ({
+      ...comment,
+      createdAt: formatDate(comment.created_at)
+    }));
+
+    return res.status(200).json({ comments: formattedComments });
+  } catch (error) {
+    console.error(`Error fetching comments: ${error}`);
+    res.status(500).json({ message: "Fehler beim Laden der Kommentare." });
+  }
+});
+
+// Add a comment to a post
+app.post("/api/posts/:id/comments", isAuthenticated, async (req, res) => {
+  try {
+    const postId = parseInt(req.params.id);
+    const userId = req.session.user.id;
+    const username = req.session.user.username;
+    const { content } = req.body;
+
+    if (isNaN(postId)) {
+      return res.status(400).json({ message: "Ungültige Beitrags-ID." });
+    }
+
+    if (!content || content.trim() === '') {
+      return res.status(400).json({ message: "Kommentarinhalt darf nicht leer sein." });
+    }
+
+    // Check if post exists
+    const [posts] = await dbPool.query(`SELECT * FROM ${POSTS_TABLE} WHERE id = ?`, [postId]);
+
+    if (posts.length === 0) {
+      return res.status(404).json({ message: "Beitrag nicht gefunden." });
+    }
+
+    // Add comment to database
+    const [result] = await dbPool.query(`
+      INSERT INTO post_comments (post_id, user_id, username, content)
+      VALUES (?, ?, ?, ?)
+    `, [postId, userId, username, content]);
+
+    // Get the newly created comment
+    const [newComments] = await dbPool.query(`
+      SELECT id, user_id, username, content, created_at 
+      FROM post_comments 
+      WHERE id = ?
+    `, [result.insertId]);
+
+    if (newComments.length === 0) {
+      return res.status(500).json({ message: "Fehler beim Erstellen des Kommentars." });
+    }
+
+    const comment = newComments[0];
+
+    return res.status(201).json({
+      message: "Kommentar erfolgreich erstellt.",
+      comment: {
+        ...comment,
+        createdAt: formatDate(comment.created_at)
+      }
+    });
+  } catch (error) {
+    console.error(`Error adding comment: ${error}`);
+    res.status(500).json({ message: "Serverfehler beim Erstellen des Kommentars." });
+  }
+});
+
+// Helper function to format dates nicely for comments
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffSecs < 60) return 'Gerade eben';
+  if (diffMins < 60) return `Vor ${diffMins} ${diffMins === 1 ? 'Minute' : 'Minuten'}`;
+  if (diffHours < 24) return `Vor ${diffHours} ${diffHours === 1 ? 'Stunde' : 'Stunden'}`;
+  if (diffDays < 7) return `Vor ${diffDays} ${diffDays === 1 ? 'Tag' : 'Tagen'}`;
+
+  return date.toLocaleDateString('de-DE', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}

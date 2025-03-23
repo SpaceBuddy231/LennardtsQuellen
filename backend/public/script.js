@@ -164,40 +164,43 @@ function createPostElement(post) {
     const heartCount = post.hearts_count || 0;
     const likeCount = post.likes_count || 0;
 
+    // Comments would be loaded from the server, but using empty array as placeholder
+    const comments = post.comments || [];
+
     return `
-    <div id="post-${postId}" class="flex justify-center animate__animated animate__fadeIn">
+    <div id="post-${postId}" class="flex justify-center animate__animated animate__fadeIn animate__faster">
       <div
         id="post-frame"
-        class="select-none font-semibold w-[90%] sm:w-[80%] mt-6 border-[3px] border-black justify-self-center items-center"
+        class="select-none font-semibold w-[90%] sm:w-[80%] mt-6 border-[3px] border-black justify-self-center items-center animate__animated animate__zoomIn"
       >
         <div
           class="border-b-[3px] border-black min-h-[3rem] items-center p-[1%] animate__animated animate__backInLeft"
         >
-          <p id="post-title" class="break-words sm:truncate px-2 py-1">${title} ~ ${author}</p>
+          <p id="post-title" class="break-words sm:truncate px-2 py-1 animate__animated animate__fadeIn animate__delay-1s">${title} ~ ${author}</p>
         </div>
         <div id="post-content" class="items-center p-3 h-auto animate__animated animate__fadeIn animate__delay-1s">
-          <p class="font-normal mb-[8.5%] break-words">
+          <p class="font-normal mb-[8.5%] break-words animate__animated animate__fadeInUp animate__delay-1s">
             ${content}
           </p>
           <!-- Like/Heart buttons -->
           <div class="flex justify-start items-center w-full mt-4 mb-2 animate__animated animate__backInRight">
             <div class="flex items-center gap-3 sm:gap-5">
-              <button onclick="toggleHeart('${postId}')" class="animate__animated animate__pulse animate__delay-1s animate__infinite">
+              <button onclick="toggleHeart('${postId}')" class="animate__animated animate__pulse animate__delay-1s animate__infinite hover:animate__headShake">
                 <img
                   src="assets/heart.png"
-                  class="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer"
+                  class="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer transition-all duration-200 hover:scale-110"
                   alt="Heart"
                 />
               </button>
-              <i id="heart-count-${postId}">${heartCount}</i>
-              <button onclick="toggleLike('${postId}')" class="animate__animated animate__pulse animate__delay-1s animate__infinite">
+              <i id="heart-count-${postId}" class="animate__animated animate__fadeIn">${heartCount}</i>
+              <button onclick="toggleLike('${postId}')" class="animate__animated animate__pulse animate__delay-1s animate__infinite hover:animate__headShake">
                 <img
                   src="assets/like.png"
-                  class="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer"
+                  class="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer transition-all duration-200 hover:scale-110"
                   alt="Like"
                 />
               </button>
-              <i id="like-count-${postId}">${likeCount}</i>
+              <i id="like-count-${postId}" class="animate__animated animate__fadeIn">${likeCount}</i>
             </div>
           </div>
         </div>
@@ -221,7 +224,7 @@ function createPostElement(post) {
                 value="${averageMood}"
                 data-average="${averageMood}"
                 data-post-id="${postId}"
-                class="mood-slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-slider"
+                class="mood-slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-slider animate__animated"
                 ${userMood !== null ? `data-user-value="${userMood}"` : ''}
                 aria-label="Rate post mood"
                 aria-valuemin="0"
@@ -229,10 +232,44 @@ function createPostElement(post) {
                 aria-valuenow="${averageMood}"
               />
               <div class="text-xs text-center mt-1">
-                <span id="mood-ratings-count-${postId}">${totalMoodRatings}</span> Bewertungen
+                <span id="mood-ratings-count-${postId}" class="animate__animated animate__fadeIn">${totalMoodRatings}</span> Bewertungen
               </div>
             </div>
             <div class="text-[#D80D0D] w-fit text-right animate__animated animate__bounceIn animate__delay-1s"><i>Fake</i></div>
+          </div>
+        </div>
+        
+        <!-- Comments Section -->
+        <div class="border-t-[3px] border-black p-3 animate__animated animate__fadeIn animate__delay-2s">
+          <h3 class="font-semibold mb-2 animate__animated animate__bounceIn animate__delay-2s">Kommentare</h3>
+          
+          <!-- Comment Form -->
+          <div class="mb-4 animate__animated animate__fadeInLeft animate__delay-2s">
+            <textarea 
+              id="comment-input-${postId}" 
+              class="w-full p-2 border-2 border-[#878472] rounded-md mb-2 bg-form-input-bg text-text resize-y focus:border-[#F7B32B] focus:outline-none transition-all duration-200 hover:shadow-md"
+              placeholder="Schreibe einen Kommentar..."
+              rows="2"
+            ></textarea>
+            <button 
+              onclick="submitComment('${postId}')" 
+              class="font-rubik font-semibold bg-button hover:bg-button-hover py-1 px-4 rounded-[10px] border-2 border-[#878472] text-sm transition-all duration-200 hover:scale-105 animate__animated animate__heartBeat animate__delay-3s animate__repeat-1"
+            >
+              Kommentar senden
+            </button>
+          </div>
+          
+          <!-- Comments List -->
+          <div id="comments-container-${postId}" class="space-y-3 animate__animated animate__fadeIn animate__delay-3s">
+            ${comments.map((comment, index) => `
+              <div class="p-2 border-l-4 border-[#5da9e9] bg-gray-50 animate__animated animate__fadeInUp animate__delay-${3 + index / 2}s hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-medium animate__animated animate__fadeIn animate__delay-${3 + index / 2}s">${comment.username || 'Anonym'}</span>
+                  <span class="text-xs text-gray-500 animate__animated animate__fadeIn animate__delay-${3 + index / 2}s">${comment.createdAt || 'Jetzt'}</span>
+                </div>
+                <p class="text-sm animate__animated animate__flipInX animate__delay-${3.2 + index / 2}s">${comment.content || ''}</p>
+              </div>
+            `).join('') || '<p class="text-sm text-gray-500 italic animate__animated animate__fadeIn animate__delay-3s animate__infinite animate__pulse">Noch keine Kommentare. Sei der Erste!</p>'}
           </div>
         </div>
       </div>
@@ -399,6 +436,68 @@ async function toggleLike(postId) {
         }
     } catch (error) {
         console.error('Error toggling like:', error);
+    }
+}
+
+// Function to submit a new comment
+async function submitComment(postId) {
+    try {
+        // Check if user is logged in first
+        const userResponse = await fetch('/api/user');
+        const userData = await userResponse.json();
+
+        if (!userData.isLoggedIn) {
+            alert("Du musst angemeldet sein, um Kommentare zu schreiben!");
+            return;
+        }
+
+        const commentInput = document.getElementById(`comment-input-${postId}`);
+        const commentText = commentInput.value.trim();
+
+        if (!commentText) {
+            alert("Bitte gib einen Kommentartext ein!");
+            return;
+        }
+
+        const response = await fetch(`/api/posts/${postId}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: commentText })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            // Add the new comment to the UI
+            const commentsContainer = document.getElementById(`comments-container-${postId}`);
+
+            // Remove placeholder text if it exists
+            const placeholder = commentsContainer.querySelector('.italic');
+            if (placeholder) {
+                commentsContainer.innerHTML = '';
+            }
+
+            // Add new comment
+            const newComment = document.createElement('div');
+            newComment.className = 'p-2 border-l-4 border-[#5da9e9] bg-gray-50 animate__animated animate__fadeIn';
+            newComment.innerHTML = `
+                <div class="flex justify-between items-center mb-1">
+                    <span class="font-medium">${userData.user.username}</span>
+                    <span class="text-xs text-gray-500">Gerade eben</span>
+                </div>
+                <p class="text-sm">${commentText}</p>
+            `;
+
+            commentsContainer.prepend(newComment);
+            commentInput.value = '';
+        } else {
+            alert("Fehler beim Senden des Kommentars. Bitte versuche es erneut.");
+        }
+    } catch (error) {
+        console.error('Error submitting comment:', error);
+        alert("Fehler beim Senden des Kommentars.");
     }
 }
 
