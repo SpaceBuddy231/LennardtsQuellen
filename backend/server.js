@@ -96,6 +96,10 @@ app.get("/admin", isAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
+app.get("/rechtlicher-standpunkt", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'rechtlicher-standpunkt.html'));
+});
+
 // Database connection pool
 let dbPool;
 
