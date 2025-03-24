@@ -53,7 +53,7 @@
       };
     </script>
   </head>
-  <body class="bg-primary font-rubik min-h-screen">
+  <body class="bg-primary font-rubik min-h-screen overflow-x-hidden">
     <div class="w-full min-h-screen">
       <!-- Navigation Bar -->
       <div
@@ -228,5 +228,40 @@
         </div>
       </div>
     </div>
+    <!-- Footer -->
+    <footer class="w-full border-t-[3px] border-black p-[1%] mt-6">
+      <div
+        class="flex flex-col md:flex-row justify-between items-center gap-4 animate__animated animate__fadeIn"
+      >
+        <div class="text-center md:text-left">
+          <h3
+            class="font-rubik font-semibold text-[clamp(1rem,1.2vw+0.5rem,1.8rem)]"
+          >
+            Lennardts Quellen
+          </h3>
+          <p class="text-sm mt-1">Alle Inhalte sind satirischer Natur</p>
+        </div>
+
+        <div class="flex gap-4 items-center justify-center md:justify-end">
+          <a
+            href="/rechtlicher-standpunkt"
+            class="font-rubik text-sm hover:underline transition duration-200"
+            >>> Rechtlicher Standpunkt des Seiteninhabers <<</a
+          >
+          <a
+            href="/admin"
+            class="font-rubik text-sm hover:underline transition duration-200"
+            >>> Admin <<</a
+          >
+        </div>
+
+        <div class="text-center md:text-right text-sm">
+          <p>© 2025 Lennardts Quellen</p>
+          <p class="mt-1 text-xs">
+            Designed mit <span class="text-[#D80D0D]">♥</span> für Lennardt!
+          </p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

@@ -95,7 +95,7 @@ async function Submit() {
 }
 
 function NavbarTitle() {
-    window.location.href = "http://127.0.0.1:5000/"
+    window.location.href = location.origin + "/";
 }
 
 function ToError(object) {

@@ -78,11 +78,11 @@ window.onload = function () {
 };
 
 function LoginButton() {
-    window.location.href = location.href + "login";
+    window.location.href = location.origin + "/login";
 }
 
 function RegisterButton() {
-    window.location.href = location.href + "register";
+    window.location.href = location.origin + "/register";
 }
 
 function randRotationCalc() {
@@ -105,7 +105,7 @@ function randLocationCommentCalc(toggler) {
 }
 
 function NavbarTitle() {
-    window.location.href = "http://127.0.0.1:5000/"
+    window.location.href = location.origin + "/";
 }
 
 async function checkLoginStatus() {
