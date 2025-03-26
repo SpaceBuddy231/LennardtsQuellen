@@ -100,6 +100,9 @@ app.get("/rechtlicher-standpunkt", (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'rechtlicher-standpunkt.html'));
 });
 
+app.get("/haftungsausschluss", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'haftungsausschluss.html'));
+});
 // Database connection pool
 let dbPool;
 
@@ -807,6 +810,78 @@ app.post("/api/posts/:id/comments", isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error(`Error adding comment: ${error}`);
     res.status(500).json({ message: "Serverfehler beim Erstellen des Kommentars." });
+  }
+});
+
+app.put("/api/posts/:postId/comments/:commentId", isAuthenticated, async (req, res) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    const commentId = parseInt(req.params.commentId);
+    const userId = req.session.user.id;
+    const { content } = req.body;  // This line is correct
+
+    console.log(`User ${userId} attempting to update comment ${commentId} for post ${postId}`);
+    console.log("Content received:", content); // Add logging for content
+
+    if (isNaN(postId) || isNaN(commentId)) {
+      return res.status(400).json({ message: "Ungültige Parameter." });
+    }
+
+    if (!content || content.trim() === '') {
+      return res.status(400).json({ message: "Kommentarinhalt darf nicht leer sein." });
+    }
+
+    // Check if comment exists and belongs to the user
+    const [comments] = await dbPool.query(
+      `SELECT * FROM post_comments WHERE id = ? AND post_id = ? AND user_id = ?`,
+      [commentId, postId, userId]
+    );
+
+    if (comments.length === 0) {
+      return res.status(404).json({ message: "Kommentar nicht gefunden oder keine Berechtigung." });
+    }
+
+    // Update comment
+    const [updateResult] = await dbPool.query(
+      `UPDATE post_comments SET content = ? WHERE id = ?`,
+      [content, commentId]
+    );
+
+    console.log(`Comment update result:`, updateResult);
+
+    res.status(200).json({
+      message: "Kommentar erfolgreich aktualisiert.",
+      comment: {
+        id: commentId,
+        content: content,
+        updatedAt: formatDate(new Date())
+      }
+    });
+  } catch (error) {
+    console.error(`Error updating comment: ${error}`);
+    console.error(`Error stack: ${error.stack}`);
+    res.status(500).json({ message: "Serverfehler beim Aktualisieren des Kommentars." });
+  }
+});
+
+// Add this new endpoint to validate the secret code
+app.post("/api/validate-secret-code", (req, res) => {
+  try {
+    const { secret_code } = req.body;
+
+    // Compare with the environment variable
+    const isValid = secret_code === process.env.SECRET_CODE;
+
+    if (isValid) {
+      // Set a session cookie to remember this browser has access
+      req.session.hasAccessToSite = true;
+      return res.status(200).json({ valid: true });
+    } else {
+      return res.status(403).json({ valid: false, message: "Ungültiger Geheimcode." });
+    }
+  } catch (error) {
+    console.error('Error validating secret code:', error);
+    res.status(500).json({ valid: false, message: "Serverfehler bei der Validierung." });
   }
 });
 
