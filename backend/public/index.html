@@ -27,6 +27,12 @@
       rel="stylesheet"
     />
 
+    <!-- Add this in the head section, after your other CSS libraries -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
     <script>
       tailwind.config = {
         theme: {
@@ -47,6 +53,308 @@
     </script>
   </head>
   <body class="bg-primary overflow-x-hidden">
+    <!-- Secret Code Gate Overlay -->
+    <div
+      id="secret-code-gate"
+      class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center"
+    >
+      <div
+        class="bg-primary p-8 rounded-lg w-[90%] max-w-md animate__animated animate__zoomIn"
+      >
+        <div class="text-center mb-6">
+          <img
+            src="assets/lennardt-stroke.png"
+            alt="Lennardts Quellen"
+            class="w-32 h-32 mx-auto mb-4"
+          />
+          <h2 class="text-2xl font-bold mb-2">
+            Willkommen bei Lennardts Quellen
+          </h2>
+          <p class="text-gray-700">
+            Bitte gib den Fleischlover Geheimcode ein, um auf die Seite
+            zuzugreifen.
+          </p>
+        </div>
+
+        <div class="relative w-full mb-4">
+          <input
+            type="password"
+            id="gate-secret-code"
+            class="w-full rounded-[3.5px] h-10 p-2 bg-white border-[#878472] border-2 text-text placeholder-[#2525258a] transition duration-200 ease-in-out focus:border-[#F7B32B] focus:outline-none"
+            placeholder="Fleischlover Geheimcode"
+          />
+          <button
+            type="button"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+            onclick="togglePasswordVisibility('gate-secret-code')"
+          >
+            <i id="gate-secret-code-icon" class="fas fa-eye"></i>
+          </button>
+        </div>
+
+        <div
+          id="gate-error-message"
+          class="text-red-500 text-sm mb-4 text-center hidden"
+        >
+          Ungültiger Geheimcode. Bitte versuche es erneut.
+        </div>
+
+        <button
+          id="submit-secret-code"
+          class="w-full font-rubik font-semibold bg-button hover:bg-button-hover py-2 px-6 rounded-[10px] border-2 border-[#878472] transition duration-200 hover:scale-105"
+        >
+          Zugang freischalten
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content (hidden initially) -->
+    <div id="main-content" class="hidden">
+      <div class="w-full">
+        <!-- Navigation Bar -->
+        <div
+          class="w-full flex border-black p-[0.5%] justify-between items-center sticky top-0 z-40 bg-primary"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Add the gate access script before the closing body tag -->
+    <script>
+      function togglePasswordVisibility(inputId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(`${inputId}-icon`);
+
+        if (!input || !icon) return;
+
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+          icon.setAttribute('aria-label', 'Hide password');
+        } else {
+          input.type = 'password';
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+          icon.setAttribute('aria-label', 'Show password');
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Get gate elements
+        const secretCodeGate = document.getElementById('secret-code-gate');
+        const mainContent = document.getElementById('main-content');
+        const secretCodeInput = document.getElementById('gate-secret-code');
+        const submitButton = document.getElementById('submit-secret-code');
+        const errorMessage = document.getElementById('gate-error-message');
+
+        if (
+          !secretCodeGate ||
+          !mainContent ||
+          !secretCodeInput ||
+          !submitButton ||
+          !errorMessage
+        ) {
+          console.error('Required gate elements not found');
+          return;
+        }
+
+        // Check if user has already been verified in this session
+        const verification = localStorage.getItem('secretCodeVerified');
+        if (verification) {
+          try {
+            const data = JSON.parse(verification);
+            const now = Date.now();
+            const isValid =
+              data.verified && now - data.timestamp < data.expires;
+
+            if (isValid) {
+              secretCodeGate.classList.add('hidden');
+              mainContent.classList.remove('hidden');
+
+              // Initialize the site functions
+              if (typeof checkLoginStatus === 'function') checkLoginStatus();
+              if (typeof loadPosts === 'function') loadPosts();
+              if (typeof checkMaintenanceMode === 'function')
+                checkMaintenanceMode();
+              return;
+            } else {
+              // Expired, remove it
+              localStorage.removeItem('secretCodeVerified');
+            }
+          } catch (e) {
+            // Invalid data format, remove it
+            localStorage.removeItem('secretCodeVerified');
+          }
+        }
+
+        // Extract the rest of your DOM content
+        const existingBody = document.body.innerHTML;
+        const gateContent = secretCodeGate.outerHTML;
+
+        // Replace body content with just the gate and hidden main content wrapper
+        document.body.innerHTML =
+          gateContent +
+          '<div id="main-content" class="hidden">' +
+          existingBody.replace(gateContent, '') +
+          '</div>';
+
+        // Re-get the elements after DOM manipulation
+        const newSecretCodeGate = document.getElementById('secret-code-gate');
+        const newMainContent = document.getElementById('main-content');
+        const newSecretCodeInput = document.getElementById('gate-secret-code');
+        const newSubmitButton = document.getElementById('submit-secret-code');
+        const newErrorMessage = document.getElementById('gate-error-message');
+
+        // Focus on the input field for better UX
+        if (newSecretCodeInput) {
+          setTimeout(() => newSecretCodeInput.focus(), 500);
+        }
+
+        // Handle secret code submission
+        async function submitSecretCode() {
+          if (!newSecretCodeInput || !newErrorMessage) return;
+
+          const secretCode = newSecretCodeInput.value.trim();
+
+          // Basic client-side validation
+          if (!secretCode) {
+            showError('Bitte gib den Geheimcode ein.');
+            return;
+          }
+
+          // Disable submit button during request
+          if (newSubmitButton) {
+            newSubmitButton.disabled = true;
+            newSubmitButton.classList.add('opacity-50');
+          }
+
+          try {
+            const response = await fetch('/api/validate-secret-code', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ secret_code: secretCode }),
+              // Add timeout to prevent hanging requests
+              signal: AbortSignal.timeout(10000),
+            });
+
+            // Re-enable button
+            if (newSubmitButton) {
+              newSubmitButton.disabled = false;
+              newSubmitButton.classList.remove('opacity-50');
+            }
+
+            if (!response.ok) {
+              // Handle HTTP errors
+              const errorText = await response.text();
+              throw new Error(`HTTP error ${response.status}: ${errorText}`);
+            }
+
+            const data = await response.json();
+
+            if (data.valid) {
+              // Store verification in session storage
+              localStorage.setItem(
+                'secretCodeVerified',
+                JSON.stringify({
+                  verified: true,
+                  timestamp: Date.now(),
+                  // Expiration time in milliseconds (e.g., 30 minutes = 30 * 60 * 1000)
+                  expires: 30 * 60 * 1000,
+                })
+              );
+
+              // Hide gate and show content with animation
+              newSecretCodeGate.classList.add(
+                'animate__animated',
+                'animate__fadeOutUp'
+              );
+
+              setTimeout(() => {
+                newSecretCodeGate.classList.add('hidden');
+                newMainContent.classList.remove('hidden');
+                newMainContent.classList.add(
+                  'animate__animated',
+                  'animate__fadeIn'
+                );
+
+                // Initialize the rest of your site
+                if (typeof checkLoginStatus === 'function') checkLoginStatus();
+                if (typeof loadPosts === 'function') loadPosts();
+                if (typeof checkMaintenanceMode === 'function')
+                  checkMaintenanceMode();
+              }, 500);
+            } else {
+              // Show error message for invalid code
+              showError(
+                data.message ||
+                  'Ungültiger Geheimcode. Bitte versuche es erneut.'
+              );
+
+              // Clear the input for better UX on retry
+              if (newSecretCodeInput) {
+                newSecretCodeInput.value = '';
+                newSecretCodeInput.focus();
+              }
+            }
+          } catch (error) {
+            console.error('Error validating secret code:', error);
+
+            // Re-enable button
+            if (newSubmitButton) {
+              newSubmitButton.disabled = false;
+              newSubmitButton.classList.remove('opacity-50');
+            }
+
+            // Check if it's a network error
+            if (error.name === 'AbortError') {
+              showError(
+                'Die Anfrage hat zu lange gedauert. Bitte überprüfe deine Internetverbindung.'
+              );
+            } else {
+              showError(
+                'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.'
+              );
+            }
+          }
+        }
+
+        // Helper function to show errors with animation
+        function showError(message) {
+          if (!newErrorMessage) return;
+
+          newErrorMessage.textContent = message;
+          newErrorMessage.classList.remove('hidden');
+          newErrorMessage.classList.add('animate__animated', 'animate__shakeX');
+
+          // Clear the animation class after animation completes
+          setTimeout(() => {
+            if (newErrorMessage) {
+              newErrorMessage.classList.remove(
+                'animate__animated',
+                'animate__shakeX'
+              );
+            }
+          }, 1000);
+        }
+
+        // Add event listeners
+        if (newSubmitButton) {
+          newSubmitButton.addEventListener('click', submitSecretCode);
+        }
+
+        // Also submit on Enter key
+        if (newSecretCodeInput) {
+          newSecretCodeInput.addEventListener('keyup', function (event) {
+            if (event.key === 'Enter') {
+              submitSecretCode();
+            }
+          });
+        }
+      });
+    </script>
+
     <div class="w-full">
       <!-- Navigation Bar -->
       <div
@@ -152,16 +460,18 @@
           <p class="text-sm mt-1">Alle Inhalte sind satirischer Natur</p>
         </div>
 
-        <div class="flex gap-4 items-center justify-center md:justify-end">
+        <div
+          class="flex flex-wrap gap-3 items-center justify-center md:justify-end"
+        >
           <a
             href="/rechtlicher-standpunkt"
             class="font-rubik text-sm hover:underline transition duration-200"
             >>> Rechtlicher Standpunkt des Seiteninhabers <<</a
           >
           <a
-            href="/admin"
+            href="/haftungsausschluss"
             class="font-rubik text-sm hover:underline transition duration-200"
-            >>> Admin <<</a
+            >>> Haftungsausschluss <<</a
           >
         </div>
 
